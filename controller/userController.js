@@ -2,11 +2,33 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 exports.login_page = function(req,res) {
-    res.render('login_page');
+    let token = req.session.token;
+
+    jwt.verify(token,process.env.SECRETKEY,(err,data)=>{
+        if(err)
+        {
+            res.render('login_page'); 
+        }
+        else
+        {
+            res.redirect(`/user/${req.session.user.id}`);
+        }
+    })
 }
 
 exports.register_page = function(req,res) {
-    res.render('register_page');
+    let token = req.session.token;
+
+    jwt.verify(token,process.env.SECRETKEY,(err,data)=>{
+        if(err)
+        {
+            res.render('register_page'); 
+        }
+        else
+        {
+            res.redirect(`/user/${req.session.user.id}`);
+        }
+    })
 }
 
 exports.register = async function(req,res) {
@@ -17,7 +39,8 @@ exports.register = async function(req,res) {
             id:data.insertedId.toString(),
             email:user.data.email,
         }
-        console.log(req.session.user);
+        let token = jwt.sign(req.session.user,process.env.SECRETKEY,{expiresIn:'30m'})
+        req.session.token = token;
         req.session.save(()=>{
             res.redirect('emailconfirm');            
         })
@@ -27,13 +50,12 @@ exports.register = async function(req,res) {
     })
 }
 
-exports.dashboard = async function(req,res){
-    console.log("Dashboard:",req.session.user);
+exports.dashboard = function(req,res){
     let id = req.session.user.id;
-
+    console.log('dashboard:',req.session.user);
     if(id)
     {
-       await User.isverified(id).then(()=>{
+       User.isverified(id).then(()=>{
             res.render('dashboard',{id:id});
         })
         .catch(()=>{
@@ -47,7 +69,20 @@ exports.dashboard = async function(req,res){
 }
 
 exports.emailconfirm_page = function(req,res){
-    res.render('mailconfirm_page');        
+    let id = req.session.user.id;
+    if(id)
+    {
+        User.isverified(id).then(()=>{
+            res.redirect(`/user/${id}`);
+        })
+        .catch(()=>{
+            res.render('mailconfirm_page');
+        })        
+    }
+    else
+    {
+        res.redirect('/');
+    }
 }
 
 exports.emailconfirm = function(req,res){
@@ -57,11 +92,12 @@ exports.emailconfirm = function(req,res){
     let code = req.body.code;
     if(id)
     {
-        User.confirm_code(id,code).then(()=>{
+        User.confirm_code(id,code).then(async ()=>{
             //res.send('code confirmed! ;)');
-            res.redirect(`/user/${id}`);        
+            req.session.save(()=>{
+                res.redirect(`/user/${id}`);                 
+            });
         }).catch((err)=>{
-            //res.send('code not-confirmed! ;( '+err);
             res.render('mailconfirm_page',{err:err});
         })        
     }

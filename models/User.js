@@ -95,9 +95,17 @@ User.prototype.register = async function(){
 
 
 User.isverified = function(id){
+    id = new ObjectId(id);
     return new Promise(async (resolve,reject)=>{
         await usersCollection.findOne({_id:id}).then((data)=>{
-            resolve();
+            if(data.verified)
+            {
+                resolve();
+            }
+            else
+            {
+                reject("Not Verified!");
+            }
         }).catch((err)=>{
             reject([err]);
         })
