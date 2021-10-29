@@ -1,0 +1,44 @@
+body{
+    background-color: rgb(31, 29, 29);
+}
+.form-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.form-details{
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;    
+    border:3px solid #0d6efd;
+    background-color: rgb(65, 63, 63);
+    padding:10px;
+    width:300px;
+}
+.register-button{
+    width: 250px;
+    margin-top: 10px;
+    background-color: orange;
+}
+.form-desc{
+    align-self: center;
+    text-align: center;
+    font-size: 20px;
+    color: white;
+    background-color: #0d6efd;
+    width:300px;
+    padding: 5px;
+}
+.change-button{
+    align-self: center;
+}
+input{
+    margin: 5px;
+    padding: 6px 10px;
+}
+
+
+
+
+
