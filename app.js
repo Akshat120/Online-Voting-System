@@ -3,6 +3,7 @@ const app = express()
 const path = require('path')
 const router = require('./router');
 const session = require('express-session')
+const cookieParser = require('cookie-parser')
 
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
@@ -15,6 +16,6 @@ app.use(session({
     saveUninitialized:false,
     cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly:true }
 }))
-
+app.use(cookieParser());
 app.use('/',router);
 module.exports = app

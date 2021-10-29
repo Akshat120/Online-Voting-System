@@ -6,11 +6,10 @@
 <h1 class="display-6 text-center text-white p-3 "> Online Voting System </h1>
 
 <div class="form-container">
-    <div class="form-desc"> LOGIN </div>
-    <form class="form-details" action="/check" method="GET">    
-        <input type="email" name="email" id="email" placeholder="email">
-        <input type="password" name="password" id="password" placeholder="password">
-        <input type="submit" class="btn btn-primary" value="LOGIN">
+    <div class="form-desc"> CODEGEN </div>
+    <form class="form-details" action="/emailconfirm" method="post">    
+        <input type="password" name="code" id="password" placeholder="password">
+        <input type="submit" class="btn btn-primary" value="Confirm"> 
         <% if(typeof(err)!="undefined") { %>
             <div class="alert alert-danger p-0 pt-1" role="alert">
                 <ul>
@@ -24,12 +23,11 @@
         <% } %>
     </form>
     <div class="change-button">
-        <a href="/register">
-            <button class="btn register-button" onclick="">REGISTER</button>
-        </a>
-    </div>
+    <a href="/">
+        <button class="btn register-button" onclick="">LOGIN</button>
+    </a>
+</div>
 </div>
 
 
-<script src="JS/login_register.js"></script>
 <%- include('./common/footer')%>
