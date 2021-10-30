@@ -38,7 +38,7 @@ exports.login = function(req,res){
             id:id,
             email:data.email
         }           
-        let token = jwt.sign(req.session.user,process.env.SECRETKEY,{expiresIn:'30m'});
+        let token = jwt.sign(req.session.user,process.env.SECRETKEY,{expiresIn:'1d'});
         req.session.token = token;
         User.isverified(id).then(()=>{
             console.log('userlogin verified');
@@ -79,7 +79,7 @@ exports.register = async function(req,res) {
             id:data.insertedId.toString(),
             email:user.data.email,
         }
-        let token = jwt.sign(req.session.user,process.env.SECRETKEY,{expiresIn:'30m'})
+        let token = jwt.sign(req.session.user,process.env.SECRETKEY,{expiresIn:'1d'})
         req.session.token = token;
         req.session.save(()=>{
             res.redirect('emailconfirm');            
@@ -116,7 +116,7 @@ exports.emailconfirm_page = function(req,res){
     if(user)
     {
         User.isverified(user.id).then(()=>{
-            res.redirect(`/user/${id}`);
+            res.redirect(`/user/${user.id}`);
         })
         .catch(()=>{
             res.render('mailconfirm_page');

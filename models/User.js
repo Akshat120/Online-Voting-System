@@ -74,18 +74,29 @@ User.prototype.register = async function(){
             
             let transporter = nodemailer.createTransport({
                 service: 'gmail',
+                secure: true,
                 auth: 
                 {
                     user: 'software.engine.3@gmail.com',
                     pass: process.env.EMAILPASSWORD,
-                }
+                },
+                from:'Confirmation Mail',
+
             })
-    
+            
+            let template_text = `<div>
+            <p>Verify your email,
+             <br> 
+             Security code: <b>${code}</b> 
+            </p>
+            </div>`;
+
             let mailOptions = {
-                from: `Voting System Confirmation`,
+                from: '"Online Voting System" <software.engine.3@gmail.com>',
                 to: this.data.email,
-                subject: 'Voting System Confirmation',
-                text: 'Secret Code: ' + code
+                subject: 'mail confirmation',
+                html: template_text,
+                text: template_text,
             }
     
             transporter.sendMail(mailOptions, function(err, result) {
