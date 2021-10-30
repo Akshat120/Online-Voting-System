@@ -40,6 +40,20 @@ User.prototype.validate = async function(){
     })
 }
 
+User.prototype.login = async function(){
+    return new Promise(async (resolve,reject)=>{
+        console.log(this.data.email);
+        await usersCollection.findOne({email:this.data.email}).then((data)=>{
+            resolve({
+                id:data._id,
+                email:data.email,
+            });
+        }).catch((err)=>{
+            reject(['No user exists.'])
+        })
+    })
+}
+
 User.prototype.register = async function(){
     return new Promise(async (resolve,reject)=>{
         this.cleanUp();

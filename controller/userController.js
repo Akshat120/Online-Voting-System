@@ -17,8 +17,24 @@ exports.login_page = function(req,res) {
 }
 
 exports.login = function(req,res){
-    
-
+    let user = new User(req.body);
+    user.login().then((data)=>{
+        //res.send(data);
+        console.log('userlogin verified');
+        let id = data.id.toString();
+        req.session.user = {
+            id:id,
+            email:data.email
+        }
+        let token = jwt.sign(req.session.user,process.env.SECRETKEY,{expiresIn:'30m'});
+        req.session.token = token;
+        req.session.save(()=>{
+            console.log('redirected to dashboard');
+            res.redirect(`/user/${id}`);
+        });
+    }).catch((err)=>{
+        res.render('login_page',{err:err});
+    })
 }
 
 exports.register_page = function(req,res) {
