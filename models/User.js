@@ -44,12 +44,21 @@ User.prototype.login = async function(){
     return new Promise(async (resolve,reject)=>{
         console.log(this.data.email);
         await usersCollection.findOne({email:this.data.email}).then((data)=>{
-            resolve({
-                id:data._id,
-                email:data.email,
-            });
+
+            if(bcrypt.compareSync(this.data.password,data.password))
+            {
+                resolve({
+                    id:data._id,
+                    email:data.email,
+                });                
+            }
+            else
+            {
+                reject(['Password not-matched!']);
+            }
+
         }).catch((err)=>{
-            reject(['No user exists.'])
+            reject(['No user exists!']);
         })
     })
 }
