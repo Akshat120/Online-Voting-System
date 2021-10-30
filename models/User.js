@@ -127,7 +127,7 @@ User.isverified = function(id){
             }
             else
             {
-                reject("Not Verified!");
+                reject(["Not Verified!"]);
             }
         }).catch((err)=>{
             reject([err]);
