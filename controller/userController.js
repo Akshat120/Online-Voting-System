@@ -73,11 +73,14 @@ exports.register = async function(req,res) {
 
 exports.dashboard = function(req,res){
     let id = req.session.user.id;
-    console.log('dashboard:',req.session.user);
+    //console.log('dashboard:',req.session.user);
     if(id)
     {
        User.isverified(id).then(()=>{
-            res.render('dashboard',{id:id});
+            res.render('dashboard',{
+                id:id,
+                email:req.session.user.email
+            });
         })
         .catch(()=>{
             res.redirect('emailconfirm');
@@ -126,6 +129,11 @@ exports.emailconfirm = function(req,res){
     {
         res.redirect('/');
     }
+}
+
+exports.logout = function(req,res) {
+    req.session.destroy();
+    res.redirect('/');
 }
 
 exports.authenticateToken = function(req,res,next) {
