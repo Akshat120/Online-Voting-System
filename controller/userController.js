@@ -36,6 +36,7 @@ exports.login = function(req,res){
         let id = data.id.toString();            
         req.session.user = {
             id:id,
+            username:data.username,
             email:data.email
         }           
         let token = jwt.sign(req.session.user,process.env.SECRETKEY,{expiresIn:'1d'});
@@ -77,6 +78,7 @@ exports.register = async function(req,res) {
     await user.register().then((data)=>{
         req.session.user = {
             id:data.insertedId.toString(),
+            username:user.data.username,
             email:user.data.email,
         }
         let token = jwt.sign(req.session.user,process.env.SECRETKEY,{expiresIn:'1d'})
@@ -98,6 +100,7 @@ exports.dashboard = function(req,res){
        User.isverified(id).then(()=>{
             res.render('dashboard',{
                 id:id,
+                username:req.session.user.username,
                 email:req.session.user.email
             });
         })

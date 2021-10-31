@@ -48,6 +48,7 @@ User.prototype.login = async function(){
             if(bcrypt.compareSync(this.data.password,data.password))
             {
                 resolve({
+                    username:data.username,
                     id:data._id,
                     email:data.email,
                 });                
@@ -66,6 +67,7 @@ User.prototype.login = async function(){
 User.prototype.register = async function(){
     return new Promise(async (resolve,reject)=>{
         this.cleanUp();
+        this.data.username = this.data.email.split('@')[0];
         await this.validate();
         
         if(!this.errors.length)
@@ -110,6 +112,7 @@ User.prototype.register = async function(){
             let salt = bcrypt.genSaltSync(10)
             this.data.password = bcrypt.hashSync(this.data.password, salt)
             await usersCollection.insertOne({
+                username:this.data.username,
                 email:this.data.email,
                 password:this.data.password,
                 verified:false,
