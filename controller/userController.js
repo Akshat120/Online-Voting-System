@@ -158,6 +158,19 @@ exports.logout = function(req,res) {
     res.redirect('/');
 }
 
+exports.resendcode = function(req,res) {
+    let user = req.session.user;
+    if(user)
+    {
+        User.resendcode(user.id).then(()=>{
+            res.redirect('emailconfirm');
+        }).catch((err)=>{
+            res.redirect('/');         
+        })
+    }
+    else res.redirect('/');
+}
+
 exports.authenticateToken = function(req,res,next) {
     let user = req.session.user;
     let token = req.session.token;

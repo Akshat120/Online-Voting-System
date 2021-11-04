@@ -9,5 +9,6 @@ router.get('/emailconfirm',userController.emailconfirm_page);
 router.post('/emailconfirm',userController.emailconfirm);
 router.get('/user/:id',userController.authenticateToken,userController.dashboard);
 router.get('/logout',userController.authenticateToken,userController.logout);
+router.post('/resendemailconfirm',userController.authenticateToken,userController.resendcode);
 
 module.exports = router

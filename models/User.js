@@ -8,7 +8,43 @@ let User = function(data){
     this.data = data;
     this.errors = [];
 }
+User.sendmail = function(toemail,code){
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        secure: true,
+        auth: 
+        {
+            user: 'software.engine.3@gmail.com',
+            pass: process.env.EMAILPASSWORD,
+        },
+        from:'Confirmation Mail',
 
+    })
+    
+    let template_text = `<div>
+    <p>Verify your email,
+     <br> 
+     Security code: <b>${code}</b> 
+    </p>
+    </div>`;
+
+    let mailOptions = {
+        from: '"Online Voting System" <software.engine.3@gmail.com>',
+        to: toemail,
+        subject: 'mail confirmation',
+        html: template_text,
+        text: template_text,
+    }
+
+    transporter.sendMail(mailOptions, function(err, result) {
+        if (err) {
+            //console.log('Error ', err)
+        } else {
+           //console.log('Success ', result)
+        }
+        transporter.close()
+    }) 
+}
 User.prototype.cleanUp = function() {
     if(typeof(this.data.email)!="string") this.data.email="";
     if(typeof(this.data.password)!="string") this.data.password="";
@@ -74,41 +110,8 @@ User.prototype.register = async function(){
         {
             let code = Math.floor(999 + Math.random() * 1000)
             
-            let transporter = nodemailer.createTransport({
-                service: 'gmail',
-                secure: true,
-                auth: 
-                {
-                    user: 'software.engine.3@gmail.com',
-                    pass: process.env.EMAILPASSWORD,
-                },
-                from:'Confirmation Mail',
-
-            })
-            
-            let template_text = `<div>
-            <p>Verify your email,
-             <br> 
-             Security code: <b>${code}</b> 
-            </p>
-            </div>`;
-
-            let mailOptions = {
-                from: '"Online Voting System" <software.engine.3@gmail.com>',
-                to: this.data.email,
-                subject: 'mail confirmation',
-                html: template_text,
-                text: template_text,
-            }
-    
-            transporter.sendMail(mailOptions, function(err, result) {
-                if (err) {
-                    //console.log('Error ', err)
-                } else {
-                   //console.log('Success ', result)
-                }
-                transporter.close()
-            })            
+            User.sendmail(this.data.email,code);
+                       
             let salt = bcrypt.genSaltSync(10)
             this.data.password = bcrypt.hashSync(this.data.password, salt)
             await usersCollection.insertOne({
@@ -147,6 +150,22 @@ User.isverified = function(id){
             reject([err]);
         })
     })
+}
+User.resendcode = function(id){
+    return new Promise(async (resolve,reject)=>{
+        id = new ObjectId(id);
+        await usersCollection.findOne({_id:id}).then(async (data)=>{
+            let code = Math.floor(999 + Math.random() * 1000);
+            await usersCollection.updateOne({_id:id},{$set:{code:code}}).then(()=>{
+                User.sendmail(data.email,code);
+                resolve();
+            }).catch((err)=>{
+                reject();
+            })
+        }).catch((err)=>{
+            reject([err]);
+        })         
+    });
 }
 
 User.confirm_code = async function(id,code){
