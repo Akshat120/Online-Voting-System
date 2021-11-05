@@ -1,13 +1,10 @@
 <%- include('./common/header')%>
+<link rel="stylesheet" href="/CSS/dashboardstyle.css">
+<script scr="/JS/createvotingprocess_page.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#"><%= username %></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <a class="navbar-brand" href="/"><%= username %></a>
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
               <a class="nav-link" href="#">Home</a>
@@ -18,8 +15,30 @@
           </ul>
           <form action="/logout" method="GET">
             <input type="submit" class="btn btn-danger" value="logout">
-        </form>
-        </div>
+          </form>
       </nav>
+
+      <div class="cards-container">
+
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">New Voting Process</h5>
+            <h6 class="card-subtitle mb-2 text-muted">fast process</h6>
+            <p class="card-text">A simple and easy way to conduct voting under a single click. This system is immune to minimize any fraud and protect privacy of all voters.</p>
+            <a href="/create-voting-process" class="card-link">Create Voting Process</a>
+          </div>
+        </div>   
+
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Manage Voting Process</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Manage </h6>
+            <p class="card-text">Manage all the different voting system and improve quality of conducting it.</p>
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+          </div>
+        </div>     
+
+    </div>
 <%- include('./common/footer')%>
 

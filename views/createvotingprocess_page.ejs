@@ -1,0 +1,56 @@
+<%- include('./common/header')%>
+<link rel="stylesheet" href="CSS/createvotingprocess_page.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/"><%= username %></a>
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+          </ul>
+          <form action="/logout" method="GET">
+            <input type="submit" class="btn btn-danger" value="logout">
+          </form>
+      </nav>
+
+      <form class="container w-50" action="/create-voting-process" method="post">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" name="title" class="form-control" id="title" placeholder="Title goes here.">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea class="form-control" name="desc" id="description" rows="3" placeholder="Description goes here."></textarea>
+        </div>        
+        <div class="form-group">
+          <label for="voters">No. of Voters </label>
+          <input type="number" class="form-control" id="voters" name="voters" min="2" max="100">
+        </div>
+        <div class="form-group">
+          <label for="noofcandidate">No. of Candidates </label>
+          <input class="form-control" min="2" max="10" type="number" name="noofcandidate" id="noofcandidate" value="2">
+        </div>
+        <div id="candidates">
+          <div class="form-group">
+            <label for="candidate1">Candidate 1: </label>
+            <input type="email" class="form-control" id="candidate1" name="candidate" >
+          </div> 
+          <div class="form-group">
+            <label for="candidate2">Candidate 2: </label>
+            <input type="email" class="form-control" id="candidate2" name="candidate" >
+          </div> 
+        </div>
+        <div class="btn-container">
+          <input type="submit" class="btn btn-success btn-sm" value="CREATE">
+        </div>
+    </form>
+
+
+      <script src="JS/createvotingprocess_page.js"></script>
+<%- include('./common/footer')%>
+
