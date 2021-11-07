@@ -1,0 +1,66 @@
+<%- include('./common/header')%>
+<link rel="stylesheet" href="CSS/createvotingprocess_page.css">
+</head>
+<body>
+    <%- include('./common/navbar') %>
+    <div class="card container mt-3">
+        <h5 class="card-header bg-light"><%= data.title %></h5>
+        <div class="card-body">
+        <div class="alert alert-primary" role="alert">
+            Vote-Key: <span class="font-monospace fw-bold"><%= data.vote_code %></span> 
+            <br>
+            Candidate-Key: <span class="font-monospace fw-bold"><%= data.candidate_code %></span>
+        </div> 
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">State</th>
+              <th scope="col">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Voters</td>
+              <td><%= data.voters %></td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Voted</td>
+              <td><%= data.voted %></td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Remaining</td>
+              <td><%= data.voters - data.voted %></td>
+            </tr>
+          </tbody>
+        </table>
+        <form action= <%= `/vote-dashboard/${data._id}/voters` %> >
+          <input class="btn btn-primary btn-sm " type="submit" value="See Voters">
+        </form>   
+         <p class="card-text"><%= data.desc %></p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Candidate</th>
+                <th scope="col">Vote-Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(let i=0;i<data.candidate.length;i++){ %>  
+                <tr>
+                    <th scope="row"><%= i+1 %></th>
+                    <td><%= data.candidate[i] %></td>
+                    <td><%= data.vote_count[i] %></td>
+                </tr>
+              <% } %> 
+            </tbody>
+          </table>
+          <a href="/manage-voting-process" class="btn btn-primary">Back</a>
+        </div>
+      </div>   
+<%- include('./common/footer')%>
+

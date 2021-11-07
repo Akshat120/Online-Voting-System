@@ -16,6 +16,10 @@ router.post('/resendemailconfirm',userController.authenticateToken,userControlle
 // vote route
 router.get('/create-voting-process',userController.authenticateToken,voteController.createvotingprocess_page);
 router.post('/create-voting-process',userController.authenticateToken,voteController.createvotingprocess);
+router.get('/manage-voting-process',userController.authenticateToken,voteController.managevotingprocess_page)
+router.get('/vote-dashboard/:id',userController.authenticateToken,voteController.vote_dashboard);
+
 
 
 module.exports = router
+

@@ -1,0 +1,15 @@
+<%- include('./common/header')%>
+<link rel="stylesheet" href="CSS/createvotingprocess_page.css">
+</head>
+<body>
+    <%- include('./common/navbar') %>
+    <h2 class="fs-4 font-monospace text-center mt-2">Voting Processes</h2>
+    <div class="list-group container mt-3">
+        <% for(let i=0;i<vote.length;i++){ %>
+            <a href= <%= `/vote-dashboard/${vote[i]._id}` %> class="list-group-item list-group-item-action list-group-item-primary">
+                <%= vote[i].title %>
+            </a>
+        <% } %>
+    </div>
+<%- include('./common/footer')%>
+

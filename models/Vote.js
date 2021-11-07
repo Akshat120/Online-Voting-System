@@ -1,4 +1,4 @@
-const usersCollection = require('../db').db().collection("vote")
+const votesCollection = require('../db').db().collection("vote")
 const ObjectId = require('mongodb').ObjectId;
 const validator = require('validator');
 const keygen = require('keygenerator');
@@ -59,21 +59,28 @@ Vote.prototype.createprocess = function(id){
         console.log(this.data);
         this.cleanUp();
         this.validate();
-        
+    
         if(!this.errors.length)
         {
-            let code = keygen._();
+            let votecode = keygen._();
+            let candcode = keygen._(); 
             console.log(this.data);
-            await usersCollection.insertOne({
+            let vote_count = [];
+            for(let i=0;i<this.data.noofcandidate;i++) {vote_count.push(0);}
+            await votesCollection.insertOne({
+                conductor_id:ObjectId(id),
                 title:this.data.title,
                 desc:this.data.desc,
-                noofcandidate:this.data.noofcandidate,
                 voters:this.data.voters,
+                noofcandidate:this.data.noofcandidate,
+                vote_count:vote_count,
                 candidate:this.data.candidate,
-                vote_code:code,
-                conductor_id:ObjectId(id)
+                vote_code:votecode,
+                candidate_code:candcode,
+                voted:0,
+                voter:[],
             }).then((data)=>{
-                resolve(code);
+                resolve(data); 
             }).catch((err)=>{
                 reject([err]); 
             })            
@@ -83,6 +90,34 @@ Vote.prototype.createprocess = function(id){
     })
 }
 
+Vote.getallprocess = function(id) {
+    return new Promise(async (resolve,reject)=>{
+        id = ObjectId(id);
+        await votesCollection.find({conductor_id:id}).toArray().then((data)=>{
+            resolve(data);
+        }).catch((err)=>{
+            reject(err);
+        })      
+    })
+
+}
+Vote.find = function(id){
+    return new Promise(async (resolve,reject)=>{
+        id = ObjectId(id);
+        await votesCollection.findOne({_id:id}).then((data)=>{
+            if(data)
+            {
+                resolve(data);                
+            }
+            else
+            {
+                reject('No Vote_Process Found.')
+            }
+        }).catch((err)=>{
+            reject(err);
+        })
+    })
+}
 module.exports = Vote;
 
 
