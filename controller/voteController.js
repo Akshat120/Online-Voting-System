@@ -7,12 +7,20 @@ exports.createvotingprocess_page = function(req,res){
     res.render('createvotingprocess_page',{
         username:user.username
     });
-}
-
+}   
+    
 exports.createvotingprocess = function(req,res){
-    console.log(req.body);
-    res.send('creating voting process');
-}
+    let vote = new Vote(req.body);
+    let user = req.session.user;
+    vote.createprocess(user.id).then((data)=>{
+        res.send(data);
+    }).catch((err)=>{
+        res.render('createvotingprocess_page',{
+            username:req.session.user.username,
+            err:err,
+        });
+    })
+}   
 
 
 

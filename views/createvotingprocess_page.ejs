@@ -33,7 +33,7 @@
         </div>
         <div class="form-group">
           <label for="noofcandidate">No. of Candidates </label>
-          <input class="form-control" min="2" max="10" type="number" name="noofcandidate" id="noofcandidate" value="2">
+          <input class="form-control" min=2 max=10 type="number" name="noofcandidate" id="noofcandidate" value=2>
         </div>
         <div id="candidates">
           <div class="form-group">
@@ -47,9 +47,24 @@
         </div>
         <div class="btn-container">
           <input type="submit" class="btn btn-success btn-sm" value="CREATE">
-        </div>
+        </div>    
+        
+      <% if(typeof(err)!="undefined") { %>
+      <div class="alert alert-danger mt-2 p-0 pt-1" role="alert">
+          <ul>
+              <% for(let i=0;i<err.length;i++){ %>
+                  
+                  <li><%= err[i] %></li>
+
+              <% } %>
+          </ul>
+      </div>
+
     </form>
 
+
+
+  <% } %>    
 
       <script src="JS/createvotingprocess_page.js"></script>
 <%- include('./common/footer')%>
