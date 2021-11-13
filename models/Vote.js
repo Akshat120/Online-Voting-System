@@ -118,6 +118,74 @@ Vote.find = function(id){
         })
     })
 }
+
+Vote.find_votekey = function(votekey){
+    return new Promise(async (resolve,reject)=>{
+        await votesCollection.findOne({vote_code:votekey}).then((data)=>{
+            if(data)
+            {
+                resolve(data);
+            }
+            else
+            {
+                reject("Vote-Key not matched.");
+            }
+        }).catch((err)=>{
+            reject(err);
+        })
+    })
+}
+Vote.voted = function(id,selected,voter){
+     return new Promise(async (resolve,reject)=>{
+        id = ObjectId(id);
+        console.log(id);
+        await votesCollection.findOne({_id:id}).then(async (data)=>{
+            if(data)
+            {
+                console.log(selected);
+                let voters = data.voter;
+
+                if(voters.indexOf(voter)==-1)
+                {
+                    let vote_count = data.vote_count;
+                    let voted = data.voted;
+                    let index = data.candidate.indexOf(selected);
+                    vote_count[index]++;
+                    voted++;
+                    voters.push(voter);
+
+                    await votesCollection.updateOne(
+                        {_id:id},
+                        { 
+                            $set:
+                            {
+                                vote_count:vote_count,
+                                voter:voters,
+                                voted:voted,
+                            }
+                        },
+                    ).then(()=>{
+                        console.log("voted");
+                        resolve();
+                    }).catch((err)=>{
+                        console.log("Err",err);
+                        reject(err);
+                    });
+                }
+                else
+                {
+                    reject("already voted!");
+                }
+            }
+            else
+            {
+                reject("not a valid vote-process");
+            }
+        }).catch((err)=>{
+            reject(err);
+        })
+     })
+}
 module.exports = Vote;
 
 

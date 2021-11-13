@@ -47,5 +47,42 @@ exports.vote_dashboard = function(req,res){
 
 }
 
+exports.vote_process_verification_page = function(req,res){
+    res.render('voteprocessverification_page',{
+        username:req.session.user.username,
+    });
+}
 
+exports.confirm_vote_key = function(req,res){
+    Vote.find_votekey(req.body.votekey).then((data)=>{
+        req.session.data = data;
+        res.redirect(`/vote-page/${data._id}`);
+    }).catch((err)=>{
+        res.render('voteprocessverification_page',{
+            username:req.session.user.username,
+            err:err,
+        });
+    })
+}
+
+exports.vote_page = function(req,res){
+    res.render('vote_page',{
+        username:req.session.user.username,
+        data:req.session.data
+    });
+}
+
+exports.voted = function(req,res){
+    Vote.voted(req.params.id,req.body.selected,req.session.user.email).then((data)=>{
+        res.render('voted_page',{
+            username:req.session.user.username,
+        });
+    }).catch((err)=>{
+        res.render('vote_page',{
+            username:req.session.user.username,
+            data:req.session.data,
+            err:err,
+        })
+    })
+}
 

@@ -1,0 +1,25 @@
+<%- include('./common/header')%>
+</head>
+<body>
+  <%- include('./common/navbar') %>
+
+  <form class="form-inline container" action="/confirm-vote-key" method="POST">
+    <div class="form-group mb-2">
+      <label class="sr-only">Vote-Verification</label>
+    </div>
+    <div class="form-group mx-sm-3 mb-2">
+      <input type="password" class="form-control" name="votekey" placeholder="vote-key">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Confirm Key</button>
+
+    <% if(typeof(err)!="undefined"){ %>
+
+        <div class="alert alert-danger" role="alert">
+            <%= err %>
+        </div>        
+
+    <% } %>
+  </form>  
+
+<%- include('./common/footer')%>
+

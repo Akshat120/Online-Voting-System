@@ -1,0 +1,26 @@
+<%- include('./common/header')%>
+</head>
+<body>
+  <%- include('./common/navbar') %>
+
+<form class="container" action=<%= `/voted/${data._id}` %> method="POST" >
+  <div class="mt-3 mb-3">
+    <label class="form-label"><%= data.title %></label>
+    <label class="form-label"><%= data.desc %></label>
+    
+    <% for(let i=0;i<data.candidate.length;i++){ %>
+      <div class="mb-1">
+        <input type="radio" name="selected" id= <%= `selected${i}` %> value=<%= data.candidate[i] %> > 
+        <label class="form-label" for=<%= `selected${i}` %>><%= data.candidate[i] %></label>
+      </div> 
+    <% } %>
+    <input type="submit" value="Vote" class="btn btn-success btn-sm">
+  </div> 
+  <% if(typeof(err)!="undefined"){ %>
+    <div class="alert alert-danger" role="alert">
+      <%= err %>
+    </div>
+  <% } %>
+</form>
+<%- include('./common/footer')%>
+
