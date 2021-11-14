@@ -26,6 +26,7 @@ exports.createvotingprocess = function(req,res){
 exports.managevotingprocess_page = function(req,res){
     let user = req.session.user; 
     Vote.getallprocess(user.id).then((data)=>{
+        req.session.voter = data.voter;
         res.render('managevote_page',{
             username:req.session.user.username,
             vote:data,
@@ -37,6 +38,7 @@ exports.managevotingprocess_page = function(req,res){
 
 exports.vote_dashboard = function(req,res){
     Vote.find(req.params.id).then((data)=>{
+        req.session.data=data;
         res.render('vote_dashboard',{
             username:req.session.user.username,
             data:data,
@@ -56,7 +58,9 @@ exports.vote_process_verification_page = function(req,res){
 exports.confirm_vote_key = function(req,res){
     Vote.find_votekey(req.body.votekey).then((data)=>{
         req.session.data = data;
-        res.redirect(`/vote-page/${data._id}`);
+        req.session.save(()=>{
+            res.redirect(`/vote-page/${data._id}`);            
+        });
     }).catch((err)=>{
         res.render('voteprocessverification_page',{
             username:req.session.user.username,
@@ -86,3 +90,9 @@ exports.voted = function(req,res){
     })
 }
 
+exports.voters_page = function(req,res) {
+    res.render('voters_page',{
+        username:req.session.user.username,
+        voters:req.session.data.voter,
+    });
+}

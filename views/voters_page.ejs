@@ -1,0 +1,27 @@
+<%- include('./common/header')%>
+<link rel="stylesheet" href="/CSS/dashboardstyle.css">
+<script scr="/JS/createvotingprocess_page.js"></script>
+</head>
+<body>
+  <%- include('./common/navbar') %>
+
+<table class="container table table-striped">
+    <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Emails</th>
+        </tr>
+    </thead> 
+ 
+    <tbody> 
+    <% for(let i=0;i<voters.length;i++){ %>  
+        <tr>
+            <th scope="row"><%= (i+1) %></th>
+            <td><%= voters[i] %></td>
+        </tr>
+    <% } %>
+    </tbody>
+</table>
+
+<%- include('./common/footer')%>
+

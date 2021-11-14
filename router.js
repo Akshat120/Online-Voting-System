@@ -18,6 +18,7 @@ router.get('/create-voting-process',userController.authenticateToken,voteControl
 router.post('/create-voting-process',userController.authenticateToken,voteController.createvotingprocess);
 router.get('/manage-voting-process',userController.authenticateToken,voteController.managevotingprocess_page)
 router.get('/vote-dashboard/:id',userController.authenticateToken,voteController.vote_dashboard);
+router.get('/vote-dashboard/:id/voters',userController.authenticateToken,voteController.voters_page);
 router.get('/vote-process-verification',userController.authenticateToken,voteController.vote_process_verification_page);
 router.post('/confirm-vote-key',userController.authenticateToken,voteController.confirm_vote_key);
 router.get('/vote-page/:id',userController.authenticateToken,voteController.vote_page);
