@@ -8,6 +8,7 @@ let User = function(data){
     this.data = data;
     this.errors = [];
 }
+
 User.sendmail = function(toemail,code){
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -78,6 +79,7 @@ User.prototype.validate = async function(){
 
 User.prototype.login = async function(){
     return new Promise(async (resolve,reject)=>{
+        this.data.email = this.data.email.toLowerCase();
         console.log(this.data.email);
         await usersCollection.findOne({email:this.data.email}).then((data)=>{
 
@@ -103,17 +105,24 @@ User.prototype.login = async function(){
 User.prototype.register = async function(){
     return new Promise(async (resolve,reject)=>{
         this.cleanUp();
-        this.data.username = this.data.email.split('@')[0];
+        this.data.email = this.data.email.toLowerCase();
         await this.validate();
         
         if(!this.errors.length)
         {
-            let code = Math.floor(999 + Math.random() * 1000)
             
+            this.data.username = this.data.email.split('@')[0]; 
+
+            let code = Math.floor(999 + Math.random() * 1000)
             User.sendmail(this.data.email,code);
-                       
+                      
             let salt = bcrypt.genSaltSync(10)
             this.data.password = bcrypt.hashSync(this.data.password, salt)
+            
+            this.data.email = this.data.email.toLowerCase();
+            
+            console.log(this.data);
+
             await usersCollection.insertOne({
                 username:this.data.username,
                 email:this.data.email,
